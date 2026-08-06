@@ -48,7 +48,12 @@ git clone https://github.com/gbude-sudo/DreamerOS-Live-.git
 cd DreamerOS-Live-
 npm install
 npm run validate
+npm test
 ```
+
+> **Status:** version 0.1.0. The contract is stable to build against; additive
+> schema fields may land before 1.0, and existing fields will not be renamed
+> or removed without a major version.
 
 Add a connector:
 
@@ -97,6 +102,9 @@ packages/cli/           the command-line on-ramp (scaffold, validate, list)
 connectors/             the connector registry
   _template/              copy this to start a new connector
   github/                 a real worked example (OAuth, live)
+  gemini/                 worked example (paste-token, live)
+  figma/                  worked example (MCP client)
+  firecrawl_apikey/       worked example (API key)
 docs/                   quickstart, auth modes, rules, publishing
 .github/workflows/      CI: type-check plus copy checks
 ```

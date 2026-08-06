@@ -5,11 +5,17 @@
   "license": "MIT",
   "description": "Open connector schema and gateway contract for building governed integrations on DreamerOS.",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "validate": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test packages/schema/src/validate.test.ts"
   },
   "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
     "typescript": "^5.9.0"
   }
 }
