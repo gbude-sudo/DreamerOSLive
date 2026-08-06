@@ -7,7 +7,7 @@
 **Build governed integrations for DreamerOS.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![CI](https://github.com/gbude-sudo/DreamerOS-Live-/actions/workflows/pr-check.yml/badge.svg)](https://github.com/gbude-sudo/DreamerOS-Live-/actions/workflows/pr-check.yml)
+[![CI](https://github.com/gbude-sudo/DreamerOSLive/actions/workflows/pr-check.yml/badge.svg)](https://github.com/gbude-sudo/DreamerOSLive/actions/workflows/pr-check.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6.svg)](./tsconfig.json)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
@@ -44,8 +44,8 @@ DreamerOS service and are not in this repository.
 ## Quick start
 
 ```bash
-git clone https://github.com/gbude-sudo/DreamerOS-Live-.git
-cd DreamerOS-Live-
+git clone https://github.com/gbude-sudo/DreamerOSLive.git
+cd DreamerOSLive
 npm install
 npm run validate
 npm test
