@@ -23,6 +23,9 @@ jobs:
       - name: Type-check connectors against the schema
         run: npm run validate
 
+      - name: Run the schema unit tests
+        run: npm test
+
       - name: Dash scan (no em or en dashes - spaced hyphens only)
         run: |
           if grep -rnP "[\x{2014}\x{2013}]" --include="*.ts" --include="*.md" --include="*.json" --include="*.yml" --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=.git .; then
