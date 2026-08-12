@@ -6,19 +6,33 @@
 // lives here; this file is the single source of truth for the request and
 // response shapes the gateway honors.
 //
-// All endpoints live under /api/v1/integrations/{provider}/* on the gateway.
-// A frontend proxies them under /api/integrations/{provider}/*.
+// All endpoints live under /api/v1/integrations/{provider}/* on the gateway
+// (two, `/connections` and `/providers`, sit on /api/v1/integrations/* with
+// no provider segment). A frontend proxies them under
+// /api/integrations/{provider}/*.
+//
+// Coverage note (added 2026-08-12): this file covers the connect, health,
+// disconnect, and action lifecycle a connector author needs. The gateway
+// also serves `GET /api/v1/integrations/connection-contract` (customer-safe
+// connection copy for the /connect UI) and `GET
+// /api/v1/integrations/{provider}/runs`-adjacent sync endpoints already
+// marked DEFERRED below. `connection-contract` is gateway-internal render
+// data, not a shape a connector author calls directly, so it stays out of
+// this file on purpose rather than by omission.
 // ============================================================
 
 /**
- * POST /api/v1/integrations/{provider}/oauth/start
+ * GET /api/v1/integrations/{provider}/oauth/start
  * Begins an OAuth flow. The gateway mints a CSRF state, persists the pending
  * link, and returns the upstream authorize URL the browser should redirect to.
  * Auth: Supabase access token in the Authorization Bearer header.
+ * Corrected 2026-08-12: this route is GET on the live gateway, not POST.
+ * The live response also does not carry a `state` field; the state token
+ * rides inside `authorize_url` as a query param.
  */
 export interface OAuthStartResponse {
   authorize_url: string;
-  state: string;
+  provider: string;
 }
 
 /**
@@ -80,12 +94,91 @@ export interface IntegrationConnectionsResponse {
 }
 
 /**
- * POST /api/v1/integrations/{provider}/disconnect
+ * DELETE /api/v1/integrations/{provider}
  * Revokes the upstream token (best effort), deletes encrypted credentials,
  * and marks the link disconnected.
+ * Corrected 2026-08-12: this route is DELETE on `/{provider}` on the live
+ * gateway, not POST on a `/{provider}/disconnect` path. The live response
+ * shape is also `{ disconnected, provider }`, not `{ ok }`.
  */
 export interface DisconnectResponse {
+  disconnected: boolean;
+  provider: string;
+}
+
+/**
+ * GET /api/v1/integrations/providers
+ * The full list of provider modules the gateway knows about. This is what
+ * the frontend reads to render the connection grid; it is broader than any
+ * one user's connected set.
+ */
+export interface KnownProvidersResponse {
+  providers: unknown[];
+  count: number;
+}
+
+/**
+ * GET /api/v1/integrations/{provider}/events?limit=20
+ * The most recent `connector_action` governance events for this provider,
+ * scoped to the calling user. Read-only, newest first. Added 2026-08-12:
+ * this route existed on the live gateway before this file listed it.
+ */
+export interface ProviderEvent {
+  action: string | null;
   ok: boolean;
+  ifp_verdict: string | null;
+  latency_ms: number | null;
+  cost_usd: number;
+  error: string | null;
+  created_at: string;
+}
+
+export interface ProviderEventsResponse {
+  provider: string;
+  events: ProviderEvent[];
+  count: number;
+}
+
+/**
+ * GET /api/v1/integrations/usage?days=30
+ * Per-provider action counts for the calling user across every connected
+ * provider, most-used first. Added 2026-08-12: this route existed on the
+ * live gateway before this file listed it.
+ */
+export interface ProviderUsage {
+  provider: string;
+  actions: number;
+  ok: number;
+  failed: number;
+  last_used_at: string;
+}
+
+export interface UsageResponse {
+  days: number;
+  providers: ProviderUsage[];
+  count: number;
+}
+
+/**
+ * POST /api/v1/integrations/{provider}/actions/{action}
+ * Executes one IFP-gated connector action. The action name must be on the
+ * gateway's allowlist for that provider (see the provider's own module for
+ * which actions it exposes); an action outside the allowlist 404s. Body is
+ * forwarded to the action as keyword arguments. Added 2026-08-12: this
+ * route existed on the live gateway before this file listed it.
+ */
+export interface ConnectorActionRequest {
+  [key: string]: unknown;
+}
+
+export interface ConnectorActionResponse {
+  provider: string;
+  action: string;
+  ifp_verdict: string;
+  latency_ms: number;
+  ok?: boolean;
+  error?: string;
+  [key: string]: unknown;
 }
 
 /**

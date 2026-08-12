@@ -55,6 +55,13 @@ npm test
 > schema fields may land before 1.0, and existing fields will not be renamed
 > or removed without a major version.
 
+> **Testing against the live gateway:** `npm run validate` and `npm test`
+> check your connector and the schema itself, offline, with no account
+> needed. There is no public sandbox gateway. To see a connector run against
+> real endpoints (paste-token connect, OAuth start, health, disconnect,
+> actions), you need a hosted DreamerOS account and a Supabase access token
+> for it.
+
 Add a connector:
 
 1. Scaffold it with the CLI (or copy `connectors/_template/connector.ts`
