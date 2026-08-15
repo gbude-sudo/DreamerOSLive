@@ -1,0 +1,50 @@
+name: contract-drift-check
+
+# Catches method and path drift between this SDK's gateway contract and the
+# gateway that actually serves the endpoints. The gateway lives in a separate
+# repository, so this job reads the live gateway's OpenAPI document instead of
+# its source. Two real mismatches shipped in this file before the gate existed:
+# oauth/start was declared POST while the gateway serves GET, and disconnect was
+# declared POST /{provider}/disconnect while the gateway serves DELETE
+# /{provider}. The seed step below proves the gate still catches both.
+#
+# The job is deliberately small: no checkout of dependencies, no npm install,
+# no language toolchain setup. It runs two standard library Python commands and
+# finishes in seconds.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "packages/schema/src/gateway-contract.ts"
+      - "scripts/contract_drift_check.py"
+      - "scripts/fixtures/**"
+      - ".github/workflows/contract-drift-check.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: contract-drift-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Seed check (the gate must still catch the two known mismatches)
+        run: |
+          python3 scripts/contract_drift_check.py \
+            --contract scripts/fixtures/drifted-contract.txt \
+            --spec scripts/fixtures/gateway-openapi-pinned.json \
+            --expect-drift 2
+
+      - name: Contract vs the live gateway
+        run: |
+          python3 scripts/contract_drift_check.py \
+            --contract packages/schema/src/gateway-contract.ts \
+            --allow-unreachable

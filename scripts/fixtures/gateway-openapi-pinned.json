@@ -1,0 +1,64 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DreamerOS SCS Gateway (pinned integration paths)",
+    "version": "fixture"
+  },
+  "paths": {
+    "/api/v1/integrations/connection-contract": {
+      "get": {
+        "summary": "Describe customer-safe connection directions"
+      }
+    },
+    "/api/v1/integrations/connections": {
+      "get": {
+        "summary": "List the current user's connections"
+      }
+    },
+    "/api/v1/integrations/providers": {
+      "get": {
+        "summary": "List known connector providers"
+      }
+    },
+    "/api/v1/integrations/usage": {
+      "get": {
+        "summary": "How much each connector has actually been used"
+      }
+    },
+    "/api/v1/integrations/{provider}": {
+      "delete": {
+        "summary": "Disconnect a provider for the current user"
+      }
+    },
+    "/api/v1/integrations/{provider}/actions/{action}": {
+      "post": {
+        "summary": "Execute a connector action (IFP-gated)"
+      }
+    },
+    "/api/v1/integrations/{provider}/events": {
+      "get": {
+        "summary": "Recent connector_action events for this provider"
+      }
+    },
+    "/api/v1/integrations/{provider}/health": {
+      "get": {
+        "summary": "Heartbeat the stored token for this provider"
+      }
+    },
+    "/api/v1/integrations/{provider}/oauth/callback": {
+      "get": {
+        "summary": "Handle OAuth callback from provider"
+      }
+    },
+    "/api/v1/integrations/{provider}/oauth/start": {
+      "get": {
+        "summary": "Begin OAuth flow for a provider"
+      }
+    },
+    "/api/v1/integrations/{provider}/paste-token": {
+      "post": {
+        "summary": "Verify and store a paste-token credential"
+      }
+    }
+  }
+}

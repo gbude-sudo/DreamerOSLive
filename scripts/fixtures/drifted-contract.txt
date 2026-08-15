@@ -1,0 +1,53 @@
+// Seed fixture for the contract drift gate. Not compiled, not shipped.
+//
+// This is the shape of packages/schema/src/gateway-contract.ts before commit
+// a71b2c0. It carries the two real mismatches that shipped in the public SDK:
+//
+//   1. oauth/start was declared POST. The gateway serves GET.
+//   2. disconnect was declared POST /{provider}/disconnect. The gateway serves
+//      DELETE /{provider}.
+//
+// The gate runs against this file with --expect-drift 2. If the checker stops
+// finding both, the gate is broken and the self test fails.
+
+/**
+ * POST /api/v1/integrations/{provider}/oauth/start
+ * Begins an OAuth flow.
+ */
+export interface OAuthStartResponse {
+  authorize_url: string;
+  state: string;
+}
+
+/**
+ * GET /api/v1/integrations/{provider}/oauth/callback?code={code}&state={state}
+ * The provider redirects here after consent.
+ */
+export interface OAuthCallbackQuery {
+  code: string;
+  state: string;
+}
+
+/**
+ * POST /api/v1/integrations/{provider}/paste-token
+ * Paste-token / api-key connect flow.
+ */
+export interface PasteTokenRequest {
+  token: string;
+}
+
+/**
+ * POST /api/v1/integrations/{provider}/disconnect
+ * Revokes the upstream token and marks the link disconnected.
+ */
+export interface DisconnectResponse {
+  ok: boolean;
+}
+
+/**
+ * POST /api/v1/integrations/{provider}/sync/trigger
+ * DEFERRED: enqueues an on-demand sync run. Never fails the gate.
+ */
+export interface SyncTriggerResponse {
+  run_id: string;
+}
