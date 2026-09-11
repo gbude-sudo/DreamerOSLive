@@ -2,7 +2,8 @@
 
 Thanks for building on DreamerOS. A connector is a single typed object
 that declares what an external tool is, how it authenticates, what tier it
-requires, and - in plain English - what it can do under governance.
+requires, and - in plain English - what it can do under the fidelity checks
+the gateway runs.
 
 ## Rules
 

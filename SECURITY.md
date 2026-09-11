@@ -18,7 +18,7 @@ issue before any public disclosure.
 ## Scope
 
 This repository holds the open connector contract and example connectors. It
-does not hold credentials, tokens, or the governance runtime. Auth material and
+does not hold credentials, tokens, or the intent fidelity runtime. Auth material and
 the gateway runtime live in the hosted DreamerOS service. If your report
 concerns the hosted service rather than this repository, please say so in your
 email.

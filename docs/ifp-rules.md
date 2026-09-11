@@ -1,11 +1,14 @@
 # Writing ifp_rules
 
+IFP stands for intent fidelity protocol: the check that reads a
+connector's rules and holds its actions to them.
+
 `ifp_rules` is the heart of a DreamerOS connector and the thing that sets
 it apart. Instead of a grid of read/write permission
 toggles, every connector ships a short list of plain-English rules that
-say what it can do and what stays gated. The gateway enforces the intent
-behind these rules through the IFP three-axis check (Intent x Integrity x
-Trust) plus the EDE and DAIM passes.
+say what it can do and what stays gated. The gateway checks the intent
+behind these rules through the intent fidelity three-axis check (Intent x
+Integrity x Trust) plus its evaluation and verification passes.
 
 ## What a good rule says
 
@@ -26,14 +29,14 @@ Write each rule for a human reading the card, not for a machine:
 - Name the write actions explicitly. "Write actions are gated" is weaker
   than "commits, PRs, and comments are gated."
 - Never claim a capability the gateway does not deliver. Mis-selling a
-  connector is a governance violation, not a copy choice.
+  connector fails the fidelity check; it is not a copy choice.
 - No marketing language, no em dashes, no emojis. Plain operational copy.
 
 ## Example (GitHub)
 
 ```
 Reads your repo metadata only. Never reads private code without explicit per-action approval.
-Write actions (commits, PRs, comments) gated by IFP three-axis verification before send.
+Write actions (commits, PRs, comments) gated by the intent fidelity three-axis check before send.
 Revoked tokens detected within 5 minutes - reconnect prompt fires automatically.
 All actions logged to your audit trail (Elite tier - export anytime).
 ```
