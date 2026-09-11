@@ -4,7 +4,7 @@
 
 # DreamerOS Connectors
 
-**Build governed integrations for DreamerOS.**
+**Build verified integrations for DreamerOS.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![CI](https://github.com/gbude-sudo/DreamerOSLive/actions/workflows/pr-check.yml/badge.svg)](https://github.com/gbude-sudo/DreamerOSLive/actions/workflows/pr-check.yml)
@@ -18,20 +18,20 @@
 ---
 
 This is the open contract for wiring any external tool into the DreamerOS
-governed AI gateway. It is everything an outside builder needs and nothing
-they should not have: a typed schema that defines a valid connector, the
-gateway endpoint contract a connector speaks, a validator, a copy-me
-template, and worked examples.
+AI gateway, where every connector runs through fidelity checks. It is
+everything an outside builder needs and nothing they should not have: a
+typed schema that defines a valid connector, the gateway endpoint contract
+a connector speaks, a validator, a copy-me template, and worked examples.
 
 The definition format is open and free to build against. The orchestration
-engine, the governance runtime, and the memory layer stay in the hosted
-DreamerOS service and are not in this repository.
+engine, the intent fidelity runtime, and the memory layer stay in the
+hosted DreamerOS service and are not in this repository.
 
 ## Features
 
 - **Typed contract.** A connector is a single TypeScript object. If it
   compiles, it is valid - the compiler is the validator.
-- **Governance-native.** Every connector ships a short list of
+- **Fidelity-native.** Every connector ships a short list of
   plain-English rules describing what it can do and what stays gated.
   There is no read/write permission toggle grid.
 - **MCP-native and memory-aware.** Connectors plug into the DreamerOS MCP
@@ -89,7 +89,7 @@ See [docs/quickstart.md](./docs/quickstart.md) for the full walk-through and
 Your connector (this repo, public)        DreamerOS gateway (hosted, private)
 +-----------------------------+           +-------------------------------+
 |  Provider definition        |           |  OAuth / token exchange       |
-|  ifp_rules (plain English)  |  ---->    |  Governance runtime           |
+|  ifp_rules (plain English)  |  ---->    |  Intent fidelity runtime      |
 |  auth_mode, tier, category  |           |  Memory and MCP surface        |
 +-----------------------------+           +-------------------------------+
         open contract                              hosted engine
